@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es2020",
+    "module": "commonjs",
+    "jsx": "react",
+    "sourceMap": true,
+    "outDir": "./dist",
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+    "noImplicitAny": false,
+
+    /* Additional Checks */
+
+    /* Module Resolution Options */
+    "esModuleInterop": true,
+
+    /* Source Map Options */
+    "sourceRoot": "./src",
+
+    /* Experimental Options */
+
+    /* Advanced Options */
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+  // "files": ["./src/index.tsx"]
+}
