@@ -32,10 +32,10 @@ jobs:
             ${{ runner.os }}-${{ env.project-name }}-
 
       - name: Package Install
-        run: yarn install:fe
+        run: yarn install
 
       - name: Build
-        run: yarn build:fe
+        run: yarn build
 
       - name: Publish to AWS S3 & CloudFront Cache Clear
         uses: opspresso/action-s3-sync@v0.2.3
