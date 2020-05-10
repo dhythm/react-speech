@@ -1,9 +1,11 @@
 import { Button, Col, Row, Typography } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
 interface Props {
   transcript: string;
+  interimTranscript: string;
+  finalTranscript: string;
   startListening: any;
   stopListening: any;
   resetTranscript: any;
@@ -12,15 +14,21 @@ interface Props {
 
 const Dictaphone: React.FunctionComponent<Props> = ({
   transcript,
+  interimTranscript,
+  finalTranscript,
   startListening,
   stopListening,
   resetTranscript,
   browserSupportsSpeechRecognition: isBrowserSupported,
 }) => {
   const [isRecord, setIsRecord] = useState(false);
-  console.log({ transcript, isBrowserSupported });
-
   const { Paragraph } = Typography;
+
+  useEffect(() => {
+    if (finalTranscript) {
+      setIsRecord(false);
+    }
+  }, [isRecord, finalTranscript]);
 
   if (!isBrowserSupported) {
     return null;
