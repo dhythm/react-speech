@@ -1,3 +1,4 @@
+import { Button, Row, Typography } from 'antd';
 import React from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
@@ -14,15 +15,21 @@ const Dictaphone: React.FunctionComponent<Props> = ({
 }) => {
   console.log({ transcript, isBrowserSupported });
 
+  const { Paragraph } = Typography;
+
   if (!isBrowserSupported) {
     return null;
   }
 
   return (
-    <div>
-      <button onClick={resetTranscript}>Reset</button>
-      <span>{transcript}</span>
-    </div>
+    <>
+      <Button onClick={resetTranscript} block>
+        Reset
+      </Button>
+      <Row style={{ paddingTop: '8px' }}>
+        <Paragraph>{transcript}</Paragraph>
+      </Row>
+    </>
   );
 };
 
