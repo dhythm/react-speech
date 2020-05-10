@@ -1,4 +1,4 @@
-import { Button, Row, Typography } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import React, { useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
@@ -28,34 +28,53 @@ const Dictaphone: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      {isRecord ? (
-        <Button
-          onClick={(event) => {
-            stopListening(event);
-            setIsRecord((prevValue) => !prevValue);
-          }}
-          block>
-          Stop
-        </Button>
-      ) : (
-        <Button
-          onClick={(event) => {
-            startListening(event);
-            setIsRecord((prevValue) => !prevValue);
-          }}
-          block>
-          Rec
-        </Button>
-      )}
-      <Button
-        onClick={(event) => {
-          setIsRecord(false);
-          resetTranscript(event);
-        }}
-        block>
-        Reset
-      </Button>
-      <Row style={{ paddingTop: '8px' }}>
+      <Row
+        style={{
+          paddingLeft: '8px',
+          paddingRight: '8px',
+          marginBottom: '8px',
+        }}>
+        <Col span={12}>
+          {isRecord ? (
+            <Button
+              size="large"
+              onClick={(event) => {
+                stopListening(event);
+                setIsRecord((prevValue) => !prevValue);
+              }}
+              block>
+              Stop
+            </Button>
+          ) : (
+            <Button
+              size="large"
+              onClick={(event) => {
+                startListening(event);
+                setIsRecord((prevValue) => !prevValue);
+              }}
+              block>
+              Rec
+            </Button>
+          )}
+        </Col>
+        <Col span={12}>
+          <Button
+            size="large"
+            onClick={(event) => {
+              setIsRecord(false);
+              resetTranscript(event);
+            }}
+            block>
+            Reset
+          </Button>
+        </Col>
+      </Row>
+      <Row
+        style={{
+          paddingLeft: '8px',
+          paddingRight: '8px',
+          marginBottom: '8px',
+        }}>
         <Paragraph>{transcript}</Paragraph>
       </Row>
     </>
