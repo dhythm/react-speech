@@ -10,6 +10,7 @@ interface Props {
   stopListening: any;
   resetTranscript: any;
   browserSupportsSpeechRecognition?: boolean;
+  recognition?: any;
 }
 
 const Dictaphone: React.FunctionComponent<Props> = ({
@@ -20,6 +21,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   stopListening,
   resetTranscript,
   browserSupportsSpeechRecognition: isBrowserSupported,
+  recognition,
 }) => {
   const [isRecord, setIsRecord] = useState(false);
   const { Paragraph } = Typography;
@@ -33,6 +35,8 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   if (!isBrowserSupported) {
     return <Paragraph>Your browser does not support.</Paragraph>;
   }
+
+  recognition.lang = 'ja';
 
   return (
     <>
