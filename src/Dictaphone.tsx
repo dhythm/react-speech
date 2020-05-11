@@ -24,11 +24,13 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   recognition,
 }) => {
   const [isRecord, setIsRecord] = useState(false);
+  const [text, setText] = useState('');
   const { Paragraph } = Typography;
 
   useEffect(() => {
-    if (finalTranscript) {
+    if (isRecord && finalTranscript) {
       setIsRecord(false);
+      setText((prev) => prev.concat(finalTranscript));
     }
   }, [isRecord, finalTranscript]);
 
@@ -70,6 +72,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
             onClick={(event) => {
               setIsRecord(false);
               resetTranscript(event);
+              setText('');
             }}
             block>
             Reset
@@ -78,6 +81,9 @@ const Dictaphone: React.FunctionComponent<Props> = ({
       </Row>
       <Row style={{ marginTop: '8px' }}>
         <Paragraph>{transcript}</Paragraph>
+      </Row>
+      <Row style={{ marginTop: '8px' }}>
+        <Paragraph>{text}</Paragraph>
       </Row>
     </>
   );
