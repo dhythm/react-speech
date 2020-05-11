@@ -23,16 +23,15 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   browserSupportsSpeechRecognition: isBrowserSupported,
   recognition,
 }) => {
-  const [isRecord, setIsRecord] = useState(false);
+  const [isRecording, setIsRecord] = useState(false);
   const [text, setText] = useState('');
   const { Paragraph } = Typography;
 
   useEffect(() => {
-    if (isRecord && finalTranscript) {
-      setIsRecord(false);
-      setText((prev) => prev.concat(finalTranscript));
+    if (isRecording && finalTranscript) {
+      setText(finalTranscript);
     }
-  }, [isRecord, finalTranscript]);
+  }, [isRecording, finalTranscript]);
 
   if (!isBrowserSupported) {
     return <Paragraph>Your browser does not support.</Paragraph>;
@@ -44,12 +43,12 @@ const Dictaphone: React.FunctionComponent<Props> = ({
     <>
       <Row gutter={8}>
         <Col span={12}>
-          {isRecord ? (
+          {isRecording ? (
             <Button
               size="large"
               onClick={(event) => {
                 stopListening(event);
-                setIsRecord((prevValue) => !prevValue);
+                setIsRecord(false);
               }}
               block>
               Stop
@@ -59,7 +58,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
               size="large"
               onClick={(event) => {
                 startListening(event);
-                setIsRecord((prevValue) => !prevValue);
+                setIsRecord(true);
               }}
               block>
               Rec
@@ -70,10 +69,10 @@ const Dictaphone: React.FunctionComponent<Props> = ({
           <Button
             size="large"
             onClick={(event) => {
-              setIsRecord(false);
               resetTranscript(event);
               setText('');
             }}
+            disabled={isRecording}
             block>
             Reset
           </Button>
@@ -89,6 +88,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SpeechRecognition({ autoStart: false, continuous: false })(
+// export default SpeechRecognition({ autoStart: false, continuous: false })(
+export default SpeechRecognition({ autoStart: false, continuous: true })(
   Dictaphone,
 );

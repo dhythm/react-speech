@@ -61,8 +61,8 @@ const VoiceRecorder: React.FunctionComponent<Props> = () => {
         }}
         // onData={(data) => console.log({ data })}
         // onBlock={() => console.log()}
-        strokeColor="#000000"
-        backgroundColor="#FF4081"
+        strokeColor="#FF4081"
+        backgroundColor="#FFFFFF"
         mimeType="audio/webm" // "audio/webm", "audio/wav", "audio/mp3"
         // echoCancellation={false}
         // autoGainControl={false}
