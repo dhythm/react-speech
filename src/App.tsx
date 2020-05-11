@@ -4,6 +4,7 @@ import moment from 'moment';
 import React from 'react';
 import './App.css';
 import Dictaphone from './Dictaphone';
+import VoiceRecorder from './VoiceRecorder';
 import Wrapper from './Wrapper';
 
 const App: React.FunctionComponent = () => {
@@ -51,7 +52,13 @@ const App: React.FunctionComponent = () => {
           <Input placeholder="Participants" size="large" />
         </Wrapper>
 
-        <Dictaphone />
+        <Wrapper>
+          <Dictaphone />
+        </Wrapper>
+
+        <Wrapper>
+          <VoiceRecorder />
+        </Wrapper>
       </Layout>
     </div>
   );

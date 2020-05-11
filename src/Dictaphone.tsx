@@ -40,12 +40,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Row
-        style={{
-          paddingLeft: '8px',
-          paddingRight: '8px',
-          marginBottom: '8px',
-        }}>
+      <Row gutter={8}>
         <Col span={12}>
           {isRecord ? (
             <Button
@@ -81,12 +76,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
           </Button>
         </Col>
       </Row>
-      <Row
-        style={{
-          paddingLeft: '8px',
-          paddingRight: '8px',
-          marginBottom: '8px',
-        }}>
+      <Row style={{ marginTop: '8px' }}>
         <Paragraph>{transcript}</Paragraph>
       </Row>
     </>
