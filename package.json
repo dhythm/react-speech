@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^4.2.0",
+    "luxon": "^1.24.1",
+    "moment": "^2.25.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-speech-recognition": "^2.0.4"
@@ -22,6 +24,7 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
+    "@types/luxon": "^1.24.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "@typescript-eslint/eslint-plugin": "^2.31.0",

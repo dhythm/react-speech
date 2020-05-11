@@ -1,4 +1,6 @@
-import { DatePicker, Input, Layout, Row, Typography } from 'antd';
+import { DatePicker, Input, Layout, Row, TimePicker, Typography } from 'antd';
+import { DateTime } from 'luxon';
+import moment from 'moment';
 import React from 'react';
 import './App.css';
 import Dictaphone from './Dictaphone';
@@ -6,6 +8,10 @@ import Wrapper from './Wrapper';
 
 const App: React.FunctionComponent = () => {
   const { Title } = Typography;
+  const { RangePicker } = TimePicker;
+  const now = DateTime.local().startOf('hours');
+  const dateFormat = 'yyyy-MM-dd';
+  const timeFormat = 'HH:mm';
 
   return (
     <div className="App">
@@ -22,6 +28,23 @@ const App: React.FunctionComponent = () => {
             size="large"
             style={{ width: '100%' }}
             onChange={(date, dateString) => console.log({ date, dateString })}
+            defaultValue={moment(
+              now.toFormat(dateFormat),
+              dateFormat.toUpperCase(),
+            )}
+          />
+        </Wrapper>
+        <Wrapper>
+          <RangePicker
+            picker="time"
+            size="large"
+            style={{ width: '100%' }}
+            onChange={() => console.log('')}
+            format={timeFormat}
+            defaultValue={[
+              moment(now.toFormat(timeFormat), timeFormat),
+              moment(now.plus({ hours: 1 }).toFormat(timeFormat), timeFormat),
+            ]}
           />
         </Wrapper>
         <Wrapper>
