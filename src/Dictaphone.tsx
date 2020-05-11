@@ -31,7 +31,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   }, [isRecord, finalTranscript]);
 
   if (!isBrowserSupported) {
-    return null;
+    return <Paragraph>Your browser does not support.</Paragraph>;
   }
 
   return (
