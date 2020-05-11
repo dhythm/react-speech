@@ -81,9 +81,6 @@ const Dictaphone: React.FunctionComponent<Props> = ({
       <Row style={{ marginTop: '8px' }}>
         <Paragraph>{transcript}</Paragraph>
       </Row>
-      {/* <Row style={{ marginTop: '8px' }}>
-        <Paragraph>{text}</Paragraph>
-      </Row> */}
     </>
   );
 };
