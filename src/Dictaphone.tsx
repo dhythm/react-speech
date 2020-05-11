@@ -1,5 +1,5 @@
 import { Button, Col, Row, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
 interface Props {
@@ -24,14 +24,14 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   recognition,
 }) => {
   const [isRecording, setIsRecord] = useState(false);
-  const [text, setText] = useState('');
+  // const [text, setText] = useState('');
   const { Paragraph } = Typography;
 
-  useEffect(() => {
-    if (isRecording && finalTranscript) {
-      setText(finalTranscript);
-    }
-  }, [isRecording, finalTranscript]);
+  // useEffect(() => {
+  //   if (isRecording && finalTranscript) {
+  //     setText(finalTranscript);
+  //   }
+  // }, [isRecording, finalTranscript]);
 
   if (!isBrowserSupported) {
     return <Paragraph>Your browser does not support.</Paragraph>;
@@ -70,7 +70,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
             size="large"
             onClick={(event) => {
               resetTranscript(event);
-              setText('');
+              // setText('');
             }}
             disabled={isRecording}
             block>
@@ -81,9 +81,9 @@ const Dictaphone: React.FunctionComponent<Props> = ({
       <Row style={{ marginTop: '8px' }}>
         <Paragraph>{transcript}</Paragraph>
       </Row>
-      <Row style={{ marginTop: '8px' }}>
+      {/* <Row style={{ marginTop: '8px' }}>
         <Paragraph>{text}</Paragraph>
-      </Row>
+      </Row> */}
     </>
   );
 };
