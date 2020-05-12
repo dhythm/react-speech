@@ -9,6 +9,7 @@ interface Props {
   startListening: any;
   stopListening: any;
   resetTranscript: any;
+  listening: boolean;
   browserSupportsSpeechRecognition?: boolean;
   recognition?: any;
 }
@@ -20,18 +21,12 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   startListening,
   stopListening,
   resetTranscript,
+  listening,
   browserSupportsSpeechRecognition: isBrowserSupported,
   recognition,
 }) => {
   const [isRecording, setIsRecord] = useState(false);
-  // const [text, setText] = useState('');
-  const { Paragraph } = Typography;
-
-  // useEffect(() => {
-  //   if (isRecording && finalTranscript) {
-  //     setText(finalTranscript);
-  //   }
-  // }, [isRecording, finalTranscript]);
+  const { Paragraph, Text } = Typography;
 
   if (!isBrowserSupported) {
     return <Paragraph>Your browser does not support.</Paragraph>;
@@ -70,7 +65,6 @@ const Dictaphone: React.FunctionComponent<Props> = ({
             size="large"
             onClick={(event) => {
               resetTranscript(event);
-              // setText('');
             }}
             disabled={isRecording}
             block>
@@ -79,13 +73,17 @@ const Dictaphone: React.FunctionComponent<Props> = ({
         </Col>
       </Row>
       <Row style={{ marginTop: '8px' }}>
-        <Paragraph>{transcript}</Paragraph>
+        {transcript.split(' ').map((t, i) => (
+          <React.Fragment key={i}>
+            <Text>{t}</Text>
+            <br />
+          </React.Fragment>
+        ))}
       </Row>
     </>
   );
 };
 
-// export default SpeechRecognition({ autoStart: false, continuous: false })(
 export default SpeechRecognition({ autoStart: false, continuous: true })(
   Dictaphone,
 );
