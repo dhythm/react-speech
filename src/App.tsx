@@ -13,6 +13,7 @@ const App: React.FunctionComponent = () => {
   const now = DateTime.local().startOf('hours');
   const dateFormat = 'yyyy-MM-dd';
   const timeFormat = 'HH:mm';
+  const hide = true;
 
   return (
     <div className="App">
@@ -56,7 +57,7 @@ const App: React.FunctionComponent = () => {
           <Dictaphone />
         </Wrapper>
 
-        {process.env.NODE_ENV === 'development' && (
+        {process.env.NODE_ENV === 'development' && !hide && (
           <Wrapper>
             <VoiceRecorder />
           </Wrapper>
