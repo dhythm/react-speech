@@ -56,9 +56,11 @@ const App: React.FunctionComponent = () => {
           <Dictaphone />
         </Wrapper>
 
-        <Wrapper>
-          <VoiceRecorder />
-        </Wrapper>
+        {process.env.NODE_ENV === 'development' && (
+          <Wrapper>
+            <VoiceRecorder />
+          </Wrapper>
+        )}
       </Layout>
     </div>
   );
