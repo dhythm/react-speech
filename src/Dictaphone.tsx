@@ -33,6 +33,9 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   }
 
   recognition.lang = 'ja';
+  // console.log({ transcript });
+  // console.log({ interimTranscript });
+  // console.log({ finalTranscript });
 
   return (
     <>
@@ -73,12 +76,16 @@ const Dictaphone: React.FunctionComponent<Props> = ({
         </Col>
       </Row>
       <Row style={{ marginTop: '8px' }}>
-        {transcript.split(' ').map((t, i) => (
-          <React.Fragment key={i}>
-            <Text>{t}</Text>
-            <br />
-          </React.Fragment>
-        ))}
+        <Col span={24} style={{ textAlign: 'left' }}>
+          <Text>Output: </Text>
+          <br />
+          {transcript.split(' ').map((t, i) => (
+            <React.Fragment key={i}>
+              <Text>{t}</Text>
+              <br />
+            </React.Fragment>
+          ))}
+        </Col>
       </Row>
     </>
   );
