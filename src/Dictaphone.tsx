@@ -1,8 +1,9 @@
 import { Button, Col, Row, Typography } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
 interface Props {
+  continuous: boolean;
   transcript: string;
   interimTranscript: string;
   finalTranscript: string;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const Dictaphone: React.FunctionComponent<Props> = ({
+  continuous = true,
   transcript,
   interimTranscript,
   finalTranscript,
@@ -26,13 +28,22 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   recognition,
 }) => {
   const [isRecording, setIsRecord] = useState(false);
+  const [context, setContext] = useState<string[]>([]);
   const { Paragraph, Text } = Typography;
 
   if (!isBrowserSupported) {
     return <Paragraph>Your browser does not support.</Paragraph>;
   }
 
+  useEffect(() => {
+    if (transcript !== '' && interimTranscript === '') {
+      setContext(context.concat(transcript));
+      resetTranscript();
+    }
+  }, [interimTranscript]);
+
   recognition.lang = 'ja';
+  recognition.continuous = continuous;
   // console.log({ transcript });
   // console.log({ interimTranscript });
   // console.log({ finalTranscript });
@@ -67,7 +78,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
           <Button
             size="large"
             onClick={(event) => {
-              resetTranscript(event);
+              setContext([]);
             }}
             disabled={isRecording}
             block>
@@ -76,10 +87,28 @@ const Dictaphone: React.FunctionComponent<Props> = ({
         </Col>
       </Row>
       <Row style={{ marginTop: '8px' }}>
+        <Col span={24}>
+          <Button
+            size="large"
+            onClick={(event) => {}}
+            disabled={context.length === 0}
+            block>
+            Save
+          </Button>
+        </Col>
+      </Row>
+      <Row style={{ marginTop: '8px' }}>
+        <Col span={24} style={{ textAlign: 'left' }}>
+          <Text>Transcript: </Text>
+          <br />
+          {transcript}
+        </Col>
+      </Row>
+      <Row style={{ marginTop: '8px' }}>
         <Col span={24} style={{ textAlign: 'left' }}>
           <Text>Output: </Text>
           <br />
-          {transcript.split(' ').map((t, i) => (
+          {context.map((t, i) => (
             <React.Fragment key={i}>
               <Text>{t}</Text>
               <br />
@@ -91,6 +120,4 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SpeechRecognition({ autoStart: false, continuous: true })(
-  Dictaphone,
-);
+export default SpeechRecognition({ autoStart: false })(Dictaphone);
