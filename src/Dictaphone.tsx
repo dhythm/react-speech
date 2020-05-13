@@ -4,6 +4,7 @@ import SpeechRecognition from 'react-speech-recognition';
 
 interface Props {
   continuous: boolean;
+  handleSubmit: (any) => void;
   transcript: string;
   interimTranscript: string;
   finalTranscript: string;
@@ -17,6 +18,7 @@ interface Props {
 
 const Dictaphone: React.FunctionComponent<Props> = ({
   continuous = true,
+  handleSubmit,
   transcript,
   interimTranscript,
   finalTranscript,
@@ -90,8 +92,9 @@ const Dictaphone: React.FunctionComponent<Props> = ({
         <Col span={24}>
           <Button
             size="large"
-            onClick={(event) => {}}
+            onClick={() => handleSubmit(context)}
             disabled={context.length === 0}
+            download
             block>
             Save
           </Button>

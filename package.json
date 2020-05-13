@@ -14,12 +14,14 @@
   "dependencies": {
     "@ant-design/icons": "^4.1.0",
     "antd": "^4.2.0",
+    "formik": "^2.1.4",
     "luxon": "^1.24.1",
     "moment": "^2.25.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-mic": "^12.4.6",
-    "react-speech-recognition": "^2.0.4"
+    "react-speech-recognition": "^2.0.4",
+    "yup": "^0.28.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -30,6 +32,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "@types/react-mic": "^12.4.2",
+    "@types/yup": "^0.28.3",
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^2.31.0",
     "babel-loader": "^8.1.0",
