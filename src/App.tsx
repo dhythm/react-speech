@@ -1,8 +1,17 @@
-import { DatePicker, Input, Layout, Row, TimePicker, Typography } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
+import {
+  Button,
+  DatePicker,
+  Input,
+  Layout,
+  Row,
+  TimePicker,
+  Typography,
+} from 'antd';
 import { Form, Formik } from 'formik';
 import { DateTime } from 'luxon';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Dictaphone from './Dictaphone';
 import { initialValues, validationSchema } from './schema';
@@ -10,6 +19,7 @@ import VoiceRecorder from './VoiceRecorder';
 import Wrapper from './Wrapper';
 
 const App: React.FunctionComponent = () => {
+  const [url, setUrl] = useState('');
   const { Title } = Typography;
   const { RangePicker } = TimePicker;
   const now = DateTime.local().startOf('hours');
@@ -36,13 +46,30 @@ const App: React.FunctionComponent = () => {
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             const { title, date, timeRange, participants, context } = values;
-            console.log({
-              title,
-              date: DateTime.fromJSDate(date.toDate()),
-              timeRange: timeRange.map((v) => DateTime.fromJSDate(v.toDate())),
-              participants,
-              context,
-            });
+
+            const timeRangeStrings = timeRange.map((v) =>
+              DateTime.fromJSDate(v.toDate()).toFormat('HH:mm'),
+            );
+            const file = new Blob(
+              [
+                `Title: ${title}`,
+                `\n`,
+                `Datetime: ${DateTime.fromJSDate(date.toDate()).toFormat(
+                  'yyyy/MM/dd',
+                )} ${timeRangeStrings[0]}-${timeRangeStrings[1]}`,
+                `\n`,
+                `Participants: ${participants}`,
+                `\n`,
+                `Details:`,
+                `\n`,
+                context,
+              ],
+              {
+                type: 'text/plain',
+              },
+            );
+
+            setUrl(URL.createObjectURL(file));
           }}>
           {(formikProps) => {
             const { values, setFieldValue, handleSubmit } = formikProps;
@@ -60,7 +87,6 @@ const App: React.FunctionComponent = () => {
                     size="large"
                     style={{ width: '100%' }}
                     onChange={(date, dateString) => {
-                      console.log({ date, dateString });
                       setFieldValue('date', date);
                     }}
                     defaultValue={values.date}
@@ -89,8 +115,7 @@ const App: React.FunctionComponent = () => {
                 <Wrapper>
                   <Dictaphone
                     handleSubmit={(value) => {
-                      console.log(value);
-                      setFieldValue('context', value);
+                      setFieldValue('context', value.join('\n'));
                       handleSubmit();
                     }}
                   />
@@ -105,6 +130,19 @@ const App: React.FunctionComponent = () => {
             );
           }}
         </Formik>
+
+        <Wrapper>
+          <Button
+            size="large"
+            onClick={() => {}}
+            icon={<DownloadOutlined />}
+            disabled={!url}
+            href={url}
+            download="minutes.txt"
+            block>
+            Download
+          </Button>
+        </Wrapper>
       </Layout>
     </div>
   );
