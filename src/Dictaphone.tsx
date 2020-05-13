@@ -1,3 +1,4 @@
+import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
@@ -94,7 +95,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
             size="large"
             onClick={() => handleSubmit(context)}
             disabled={context.length === 0}
-            download
+            icon={<DownloadOutlined />}
             block>
             Save
           </Button>

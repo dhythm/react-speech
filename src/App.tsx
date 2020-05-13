@@ -11,7 +11,7 @@ import {
 import { Form, Formik } from 'formik';
 import { DateTime } from 'luxon';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 import Dictaphone from './Dictaphone';
 import { initialValues, validationSchema } from './schema';
@@ -20,6 +20,8 @@ import Wrapper from './Wrapper';
 
 const App: React.FunctionComponent = () => {
   const [url, setUrl] = useState('');
+  const ref = useRef() as React.MutableRefObject<any>;
+
   const { Title } = Typography;
   const { RangePicker } = TimePicker;
   const now = DateTime.local().startOf('hours');
@@ -70,6 +72,8 @@ const App: React.FunctionComponent = () => {
             );
 
             setUrl(URL.createObjectURL(file));
+
+            ref.current.click();
           }}>
           {(formikProps) => {
             const { values, setFieldValue, handleSubmit } = formikProps;
@@ -133,6 +137,8 @@ const App: React.FunctionComponent = () => {
 
         <Wrapper>
           <Button
+            ref={ref}
+            style={{ display: 'none' }}
             size="large"
             onClick={() => {}}
             icon={<DownloadOutlined />}
