@@ -133,9 +133,6 @@ const Dictaphone: React.FunctionComponent<Props> = ({
             onChange={(event) => {
               setEditMessage(event.target.value);
             }}
-            // onPressEnter={(event) => {
-            //   console.log({ ...event });
-            // }}
           />
         ) : (
           <Col span={24} style={{ textAlign: 'left' }}>
