@@ -161,7 +161,6 @@ const Dictaphone: React.FunctionComponent<Props> = ({
                 setEdit((prev) => !prev);
               }}
               disabled={isRecording}
-              icon={<DownloadOutlined />}
               block>
               {edit ? 'Update' : 'Edit'}
             </Button>
