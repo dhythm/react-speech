@@ -14,12 +14,14 @@ import moment from 'moment';
 import React, { useRef, useState } from 'react';
 import './App.css';
 import Dictaphone from './Dictaphone';
+import ListInput from './ListInput';
 import { initialValues, validationSchema } from './schema';
 import VoiceRecorder from './VoiceRecorder';
 import Wrapper from './Wrapper';
 
 const App: React.FunctionComponent = () => {
   const [url, setUrl] = useState('');
+  const [speaker, setSpeaker] = useState('');
   const ref = useRef() as React.MutableRefObject<any>;
 
   const { Title } = Typography;
@@ -60,7 +62,7 @@ const App: React.FunctionComponent = () => {
                   'yyyy/MM/dd',
                 )} ${timeRangeStrings[0]}-${timeRangeStrings[1]}`,
                 `\n`,
-                `Participants: ${participants}`,
+                `Participants: ${participants.join(', ')}`,
                 `\n`,
                 `Details:`,
                 `\n`,
@@ -109,15 +111,18 @@ const App: React.FunctionComponent = () => {
                   />
                 </Wrapper>
                 <Wrapper>
-                  <Input
+                  <ListInput
                     placeholder="Participants"
-                    size="large"
-                    onChange={(value) => setFieldValue('participants', value)}
+                    values={values.participants}
+                    onClick={(value) => setFieldValue('participants', value)}
+                    selected={speaker}
+                    onSelect={setSpeaker}
                   />
                 </Wrapper>
 
                 <Wrapper>
                   <Dictaphone
+                    speaker={speaker}
                     handleSubmit={(value) => {
                       setFieldValue('context', value.join('\n'));
                       handleSubmit();

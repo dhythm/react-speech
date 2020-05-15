@@ -1,9 +1,11 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Typography } from 'antd';
+import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
 
 interface Props {
+  speaker?: string;
   continuous: boolean;
   handleSubmit: (any) => void;
   transcript: string;
@@ -18,6 +20,7 @@ interface Props {
 }
 
 const Dictaphone: React.FunctionComponent<Props> = ({
+  speaker,
   continuous = true,
   handleSubmit,
   transcript,
@@ -40,7 +43,19 @@ const Dictaphone: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (transcript !== '' && interimTranscript === '') {
-      setContext(context.concat(transcript));
+      if (speaker) {
+        setContext(
+          context.concat(
+            `(${speaker} ${DateTime.local().toFormat('HH:mm')}) ${transcript}`,
+          ),
+        );
+      } else {
+        setContext(
+          context.concat(
+            `(Anonymous ${DateTime.local().toFormat('HH:mm')}) ${transcript}`,
+          ),
+        );
+      }
       resetTranscript();
     }
   }, [interimTranscript]);

@@ -4,7 +4,7 @@ export interface Values {
   title: string;
   date: moment.Moment | null;
   timeRange: [moment.Moment, moment.Moment] | null;
-  participants: string;
+  participants: string[];
   context: string;
 }
 
@@ -12,7 +12,7 @@ export const initialValues: Values = {
   title: '',
   date: null,
   timeRange: null,
-  participants: '',
+  participants: [],
   context: '',
 };
 
@@ -20,6 +20,6 @@ export const validationSchema = Yup.object({
   title: Yup.string(),
   date: Yup.string(),
   timeRange: Yup.array(),
-  participants: Yup.string(),
+  participants: Yup.array(),
   context: Yup.array(),
 });
