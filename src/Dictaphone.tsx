@@ -1,5 +1,5 @@
 import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Col, Row, Typography } from 'antd';
+import { Button, Col, Input, Row, Typography } from 'antd';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import SpeechRecognition from 'react-speech-recognition';
@@ -34,8 +34,11 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   recognition,
 }) => {
   const [isRecording, setIsRecord] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [editMessage, setEditMessage] = useState('');
   const [context, setContext] = useState<string[]>([]);
   const { Paragraph, Text } = Typography;
+  const { TextArea } = Input;
 
   if (!isBrowserSupported) {
     return <Paragraph>Your browser does not support.</Paragraph>;
@@ -60,11 +63,10 @@ const Dictaphone: React.FunctionComponent<Props> = ({
     }
   }, [interimTranscript]);
 
+  useEffect(() => {}, [isRecording]);
+
   recognition.lang = 'ja';
   recognition.continuous = continuous;
-  // console.log({ transcript });
-  // console.log({ interimTranscript });
-  // console.log({ finalTranscript });
 
   return (
     <>
@@ -124,17 +126,51 @@ const Dictaphone: React.FunctionComponent<Props> = ({
         </Col>
       </Row>
       <Row style={{ marginTop: '8px' }}>
-        <Col span={24} style={{ textAlign: 'left' }}>
-          <Text>Output: </Text>
-          <br />
-          {context.map((t, i) => (
-            <React.Fragment key={i}>
-              <Text>{t}</Text>
-              <br />
-            </React.Fragment>
-          ))}
-        </Col>
+        {edit ? (
+          <TextArea
+            autoSize
+            value={editMessage}
+            onChange={(event) => {
+              setEditMessage(event.target.value);
+            }}
+            // onPressEnter={(event) => {
+            //   console.log({ ...event });
+            // }}
+          />
+        ) : (
+          <Col span={24} style={{ textAlign: 'left' }}>
+            <Text>Output: </Text>
+            <br />
+            {context.map((t, i) => (
+              <React.Fragment key={i}>
+                <Text>{t}</Text>
+                <br />
+              </React.Fragment>
+            ))}
+          </Col>
+        )}
       </Row>
+      {context.length > 0 && (
+        <Row style={{ marginTop: '8px' }}>
+          <Col span={24}>
+            <Button
+              size="large"
+              onClick={() => {
+                if (!edit) {
+                  setEditMessage(context.join('\n'));
+                } else {
+                  setContext(editMessage.split('\n'));
+                }
+                setEdit((prev) => !prev);
+              }}
+              disabled={isRecording}
+              icon={<DownloadOutlined />}
+              block>
+              {edit ? 'Update' : 'Edit'}
+            </Button>
+          </Col>
+        </Row>
+      )}
     </>
   );
 };
