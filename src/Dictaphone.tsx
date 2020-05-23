@@ -13,11 +13,22 @@ interface Props {
   finalTranscript: string;
   startListening: any;
   stopListening: any;
+  abortListening: any;
   resetTranscript: any;
   listening: boolean;
   browserSupportsSpeechRecognition?: boolean;
   recognition?: any;
 }
+
+// https://github.com/FoundersFactory/react-speech-recognition/issues/11#issuecomment-470665721
+const SpeechGrammarList =
+  typeof window !== 'undefined' &&
+  // window.SpeechGrammarList;
+  (window.SpeechGrammarList ||
+    (window as any).webkitSpeechGrammarList ||
+    (window as any).mozSpeechGrammarList ||
+    (window as any).msSpeechGrammarList ||
+    (window as any).oSpeechGrammarList);
 
 const Dictaphone: React.FunctionComponent<Props> = ({
   speaker,
@@ -28,6 +39,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
   finalTranscript,
   startListening,
   stopListening,
+  abortListening,
   resetTranscript,
   listening,
   browserSupportsSpeechRecognition: isBrowserSupported,
@@ -44,34 +56,54 @@ const Dictaphone: React.FunctionComponent<Props> = ({
     return <Paragraph>Your browser does not support.</Paragraph>;
   }
 
+  const dumpToContext = () => {
+    if (speaker) {
+      setContext(
+        context.concat(
+          `(${speaker} ${DateTime.local().toFormat('HH:mm')}) ${transcript}`,
+        ),
+      );
+    } else {
+      setContext(
+        context.concat(
+          `(Anonymous ${DateTime.local().toFormat('HH:mm')}) ${transcript}`,
+        ),
+      );
+    }
+    resetTranscript();
+  };
+
   useEffect(() => {
+    // transcript will equal to finalTranscript and interimTranscript will be empty after recording.
     if (transcript !== '' && interimTranscript === '') {
-      if (speaker) {
-        setContext(
-          context.concat(
-            `(${speaker} ${DateTime.local().toFormat('HH:mm')}) ${transcript}`,
-          ),
-        );
-      } else {
-        setContext(
-          context.concat(
-            `(Anonymous ${DateTime.local().toFormat('HH:mm')}) ${transcript}`,
-          ),
-        );
-      }
-      resetTranscript();
+      dumpToContext();
     }
   }, [interimTranscript]);
 
   useEffect(() => {}, [isRecording]);
 
+  // const jargons = [];
+  // const grammar = `#JSGF V1.0; grammar jargons; public <jargon> = ${jargons.join(
+  //   ' | ',
+  // )} ;`;
+  const grammarNumber = `#JSGF V1.0 JIS ja; grammar numbers; public <numbers> = 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100 ;`;
+  // const grammar = `#JSGF V1.0 JIS ja; grammar jargons; public <jargon> = ${jargons.join(
+  //   ' | ',
+  // )} ;`;
+
+  if (SpeechGrammarList) {
+    const speechRecognitionList = new SpeechGrammarList();
+    speechRecognitionList.addFromString(grammarNumber, 1);
+    recognition.grammars = speechRecognitionList;
+  }
   recognition.lang = 'ja';
   recognition.continuous = continuous;
 
+  // console.log({ transcript, interimTranscript, finalTranscript });
   return (
     <>
       <Row gutter={8}>
-        <Col span={12}>
+        <Col span={8}>
           {isRecording ? (
             <Button
               size="large"
@@ -79,6 +111,7 @@ const Dictaphone: React.FunctionComponent<Props> = ({
                 stopListening(event);
                 setIsRecord(false);
               }}
+              disabled={interimTranscript.length > 0}
               block>
               Stop
             </Button>
@@ -94,7 +127,16 @@ const Dictaphone: React.FunctionComponent<Props> = ({
             </Button>
           )}
         </Col>
-        <Col span={12}>
+        <Col span={8}>
+          <Button
+            size="large"
+            onClick={dumpToContext}
+            disabled={transcript.length === 0}
+            block>
+            Dump
+          </Button>
+        </Col>
+        <Col span={8}>
           <Button
             size="large"
             onClick={(event) => {
@@ -106,18 +148,36 @@ const Dictaphone: React.FunctionComponent<Props> = ({
           </Button>
         </Col>
       </Row>
-      <Row style={{ marginTop: '8px' }}>
-        <Col span={24}>
+
+      <Row gutter={8} style={{ marginTop: '8px' }}>
+        <Col span={12}>
+          <Button
+            size="large"
+            onClick={() => {
+              if (!edit) {
+                setEditMessage(context.join('\n'));
+              } else {
+                setContext(editMessage.split('\n'));
+              }
+              setEdit((prev) => !prev);
+            }}
+            disabled={context.length === 0 || isRecording}
+            block>
+            {edit ? 'Update' : 'Edit'}
+          </Button>
+        </Col>
+        <Col span={12}>
           <Button
             size="large"
             onClick={() => handleSubmit(context)}
-            disabled={context.length === 0}
+            disabled={context.length === 0 || isRecording}
             icon={<DownloadOutlined />}
             block>
             Save
           </Button>
         </Col>
       </Row>
+
       <Row style={{ marginTop: '8px' }}>
         <Col span={24} style={{ textAlign: 'left' }}>
           <Text>Transcript: </Text>
@@ -147,26 +207,6 @@ const Dictaphone: React.FunctionComponent<Props> = ({
           </Col>
         )}
       </Row>
-      {context.length > 0 && (
-        <Row style={{ marginTop: '8px' }}>
-          <Col span={24}>
-            <Button
-              size="large"
-              onClick={() => {
-                if (!edit) {
-                  setEditMessage(context.join('\n'));
-                } else {
-                  setContext(editMessage.split('\n'));
-                }
-                setEdit((prev) => !prev);
-              }}
-              disabled={isRecording}
-              block>
-              {edit ? 'Update' : 'Edit'}
-            </Button>
-          </Col>
-        </Row>
-      )}
     </>
   );
 };

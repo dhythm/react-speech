@@ -29,7 +29,6 @@ const App: React.FunctionComponent = () => {
   const now = DateTime.local().startOf('hours');
   const dateFormat = 'yyyy-MM-dd';
   const timeFormat = 'HH:mm';
-  const hide = true;
 
   return (
     <div className="App">
@@ -50,6 +49,7 @@ const App: React.FunctionComponent = () => {
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             const { title, date, timeRange, participants, context } = values;
+            console.log({ values });
 
             const timeRangeStrings = timeRange.map((v) =>
               DateTime.fromJSDate(v.toDate()).toFormat('HH:mm'),
@@ -75,6 +75,7 @@ const App: React.FunctionComponent = () => {
 
             setUrl(URL.createObjectURL(file));
 
+            setSubmitting(false);
             ref.current.click();
           }}>
           {(formikProps) => {
@@ -85,6 +86,7 @@ const App: React.FunctionComponent = () => {
                   <Input
                     placeholder="Title"
                     size="large"
+                    value={values.title}
                     onChange={(value) => setFieldValue('title', value)}
                   />
                 </Wrapper>
@@ -95,7 +97,7 @@ const App: React.FunctionComponent = () => {
                     onChange={(date, dateString) => {
                       setFieldValue('date', date);
                     }}
-                    defaultValue={values.date}
+                    value={values.date}
                   />
                 </Wrapper>
                 <Wrapper>
@@ -107,7 +109,7 @@ const App: React.FunctionComponent = () => {
                       setFieldValue('timeRange', values);
                     }}
                     format={timeFormat}
-                    defaultValue={values.timeRange}
+                    value={values.timeRange}
                   />
                 </Wrapper>
                 <Wrapper>
@@ -119,18 +121,42 @@ const App: React.FunctionComponent = () => {
                     onSelect={setSpeaker}
                   />
                 </Wrapper>
+                <Wrapper>
+                  <Input
+                    placeholder="Filename"
+                    size="large"
+                    value={values.fileName}
+                    onChange={(value) => setFieldValue('fileName', value)}
+                  />
+                </Wrapper>
+
+                <Wrapper>
+                  <Button
+                    ref={ref}
+                    style={{ display: 'none' }}
+                    size="large"
+                    onClick={() => {}}
+                    icon={<DownloadOutlined />}
+                    disabled={!url}
+                    href={url}
+                    download={values.fileName}
+                    block>
+                    Download
+                  </Button>
+                </Wrapper>
 
                 <Wrapper>
                   <Dictaphone
                     speaker={speaker}
                     handleSubmit={(value) => {
                       setFieldValue('context', value.join('\n'));
+                      console.log({ value });
                       handleSubmit();
                     }}
                   />
                 </Wrapper>
 
-                {process.env.NODE_ENV === 'development' && !hide && (
+                {process.env.NODE_ENV === 'development' && (
                   <Wrapper>
                     <VoiceRecorder />
                   </Wrapper>
@@ -139,21 +165,6 @@ const App: React.FunctionComponent = () => {
             );
           }}
         </Formik>
-
-        <Wrapper>
-          <Button
-            ref={ref}
-            style={{ display: 'none' }}
-            size="large"
-            onClick={() => {}}
-            icon={<DownloadOutlined />}
-            disabled={!url}
-            href={url}
-            download="minutes.txt"
-            block>
-            Download
-          </Button>
-        </Wrapper>
       </Layout>
     </div>
   );
