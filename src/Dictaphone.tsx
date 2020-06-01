@@ -82,18 +82,16 @@ const Dictaphone: React.FunctionComponent<Props> = ({
 
   useEffect(() => {}, [isRecording]);
 
-  // const jargons = [];
-  // const grammar = `#JSGF V1.0; grammar jargons; public <jargon> = ${jargons.join(
-  //   ' | ',
-  // )} ;`;
   const grammarNumber = `#JSGF V1.0 JIS ja; grammar numbers; public <numbers> = 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100 ;`;
-  // const grammar = `#JSGF V1.0 JIS ja; grammar jargons; public <jargon> = ${jargons.join(
-  //   ' | ',
-  // )} ;`;
+  const units = ['キロ', 'センチ', 'ミリ'];
+  const grammarUnit = `#JSGF V1.0 JIS ja; grammar units; public <units> =  ${units.join(
+    '|',
+  )};`;
 
   if (SpeechGrammarList) {
     const speechRecognitionList = new SpeechGrammarList();
     speechRecognitionList.addFromString(grammarNumber, 1);
+    speechRecognitionList.addFromString(grammarUnit, 1);
     recognition.grammars = speechRecognitionList;
   }
   recognition.lang = 'ja';
