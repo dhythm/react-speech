@@ -87,7 +87,9 @@ const App: React.FunctionComponent = () => {
                     placeholder="Title"
                     size="large"
                     value={values.title}
-                    onChange={(value) => setFieldValue('title', value)}
+                    onChange={(event) =>
+                      setFieldValue('title', event.target.value)
+                    }
                   />
                 </Wrapper>
                 <Wrapper>
@@ -126,7 +128,9 @@ const App: React.FunctionComponent = () => {
                     placeholder="Filename"
                     size="large"
                     value={values.fileName}
-                    onChange={(value) => setFieldValue('fileName', value)}
+                    onChange={(event) =>
+                      setFieldValue('fileName', event.target.value)
+                    }
                   />
                 </Wrapper>
 
